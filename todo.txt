@@ -1,0 +1,4 @@
+gaminimo laikas
+generuojamu receptu skaicius
+dish type
+https://api.spoonacular.com/recipes/complexSearch?apiKey=82b80d934b85494f94a51a5223849b28

@@ -1,17 +1,29 @@
 const firstOption = document.getElementById("option-1");
 const secondOption = document.getElementById("option-2");
+
 const vegetarianCheck = document.getElementById("vegetarian");
 const veganCheck = document.getElementById("vegan");
 const glutenCheck = document.getElementById("gluten");
-const vegan = "&diet=vegan";
-const vegetarian = "&diet=vegetarian";
-const gluten = "&intolerances=gluten";
-const numberOfRandomResults = 30;
+
+const vegetarianCheck1 = document.getElementById("vegetarian1");
+const veganCheck1 = document.getElementById("vegan1");
+const glutenCheck1 = document.getElementById("gluten1");
+
 const cards = document.getElementById("cards");
-let randomRecept = {};
-let firstArr = [];
-let elementId = 0;
-let randomArr = [];
+
+let randomRecipe = {};
+let firstRequest = [];
+let randomRecipes = [];
+let wishList = [];
+let maxCalories = "";
+let recipeId = {};
+let recipeIngridArr = [];
+firstOption.addEventListener("click", function () {
+  document.getElementById("choose-random").classList.toggle("active");
+});
+secondOption.addEventListener("click", function () {
+  document.getElementById("complex-choose").classList.toggle("active");
+});
 
 dietCheck = function () {
   vegetarianCheck.addEventListener("click", function () {
@@ -36,118 +48,181 @@ dietCheck = function () {
       glutenCheck.value = "";
     }
   });
+  vegetarianCheck1.addEventListener("click", function () {
+    if (vegetarianCheck1.value === "") {
+      vegetarianCheck1.value = "&diet=vegetarian";
+    } else {
+      vegetarianCheck1.value = "";
+    }
+  });
+
+  veganCheck1.addEventListener("click", function () {
+    if (veganCheck1.value === "") {
+      veganCheck1.value = "&diet=vegan";
+    } else {
+      veganCheck1.value = "";
+    }
+  });
+  glutenCheck1.addEventListener("click", function () {
+    if (glutenCheck1.value === "") {
+      glutenCheck1.value = "&intolerances=gluten";
+    } else {
+      glutenCheck1.value = "";
+    }
+  });
 };
 
-function render() {
-  dietCheck();
-
-  firstOption.addEventListener("click", function () {
+function getSendId() {
+  for (j = 0; j < randomRecipes.length; j++) {
+    let el = randomRecipes[j];
     fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?apiKey=82b80d934b85494f94a51a5223849b28${vegan}${gluten}`
+      `https://api.spoonacular.com/recipes/${el}/information?apiKey=82b80d934b85494f94a51a5223849b28`
     )
       .then((response) => response.json())
       .then(function (result) {
-        result.results.forEach((element) => firstArr.push(element.id));
+        createCard(result);
+        console.log(result);
+        function pushToWishList() {
+          let keyId = "id";
+          let keyImg = "image";
+          let keyTitle = "title";
+          let keyIns = "instructions";
+          let keyTime = "readyInMinutes";
+          let keyLikes = "aggregateLikes";
+          let keyIngrid = "extendedIngredients";
 
-        for (let i = 0; i < 3; i++) {
-          randomRecept = firstArr[Math.floor(Math.random() * firstArr.length)];
-          randomArr.push(randomRecept);
+          recipeId[keyId] = result.id;
+          recipeId[keyImg] = result.image;
+          recipeId[keyTitle] = result.title;
+          recipeId[keyIns] = result.instructions;
+          recipeId[keyTime] = result.readyInMinutes;
+          recipeId[keyLikes] = result.aggregateLikes;
+          recipeId[keyIngrid] = recipeIngridArr;
+          result.extendedIngredients.forEach(function (element) {
+            recipeIngridArr.push(element.original);
+          });
+
+          console.log(recipeIngridArr);
         }
+        pushToWishList();
+      });
+  }
+}
+function generateRecipes() {
+  for (let i = 0; i < 2; i++) {
+    randomRecipe =
+      firstRequest[Math.floor(Math.random() * firstRequest.length)];
+    randomRecipes.push(randomRecipe);
+  }
+}
 
-        for (j = 0; j < randomArr.length; j++) {
-          let el = randomArr[j];
-          fetch(
-            `https://api.spoonacular.com/recipes/${el}/information?apiKey=82b80d934b85494f94a51a5223849b28`
-          )
-            .then((response) => response.json())
-            .then(function (result) {
-              let card = document.createElement("div");
-              let cardL = document.createElement("div");
-              let cardR = document.createElement("div");
-              let cardImg = document.createElement("div");
-              let cardHeader = document.createElement("div");
-              let cardTitle = document.createElement("h2");
-              let addToWish = document.createElement("i");
-              let cardInfo = document.createElement("p");
-              let cardTime = document.createElement("h3");
-              let likesSection = document.createElement("div");
-              let likesIcon = document.createElement("i");
-              let likes = document.createElement("p");
-              let ingredients = document.createElement("ul");
+function maxCaloriesFunc() {
+  if (document.getElementById("max-calories").value === "") {
+    maxCalories = "";
+  } else {
+    maxCalories = `&maxCalories=${
+      document.getElementById("max-calories").value
+    }`;
+  }
+  return maxCalories;
+}
 
-              cardL.className = "card-left";
-              cardR.className = "card-right";
-              cardImg.className = "card-img";
-              card.className = "card";
-              cardHeader.className = "card-header";
-              addToWish.className = "far fa-heart heart-icon";
-              likesSection.className = "likes-section";
-              likes.className = "likes";
-              likesIcon.className = "fas fa-thumbs-up likes-icon";
+function createCard(result) {
+  let card = document.createElement("div");
+  let cardL = document.createElement("div");
+  let cardR = document.createElement("div");
+  let cardImg = document.createElement("div");
+  let cardHeader = document.createElement("div");
+  let cardTitle = document.createElement("h2");
+  let addToWish = document.createElement("i");
+  let cardInfo = document.createElement("p");
+  let cardTime = document.createElement("h3");
+  let likesSection = document.createElement("div");
+  let likesIcon = document.createElement("i");
+  let likes = document.createElement("p");
+  let ingredients = document.createElement("ul");
 
-              cardImg.style.backgroundImage = `url(${result.image})`;
-              cardTitle.innerText = result.title;
-              cardInfo.innerText = result.instructions;
-              cardTime.innerText = `Ready in ${result.readyInMinutes} minutes`;
-              likes.innerText = `${result.aggregateLikes}`;
+  cardL.className = "card-left";
+  cardR.className = "card-right";
+  cardImg.className = "card-img";
+  card.className = "card";
+  cardHeader.className = "card-header";
+  addToWish.className = "far fa-heart heart-icon";
+  likesSection.className = "likes-section";
+  likes.className = "likes";
+  likesIcon.className = "fas fa-thumbs-up likes-icon";
 
-              result.extendedIngredients.forEach(function (element) {
-                let ingredient = document.createElement("li");
-                ingredient.innerText = element.original;
-                ingredients.appendChild(ingredient);
-              });
+  cardImg.style.backgroundImage = `url(${result.image})`;
+  cardTitle.innerText = result.title;
+  cardInfo.innerHTML = `Instructions:\n${result.instructions}`;
+  cardTime.innerText = `Ready in ${result.readyInMinutes} minutes`;
+  likes.innerText = `${result.aggregateLikes}`;
 
-              cards.appendChild(card);
-              card.appendChild(cardL);
-              card.appendChild(cardR);
-              cardL.appendChild(cardImg);
-              cardR.appendChild(cardHeader);
-              cardHeader.appendChild(cardTitle);
-              cardHeader.appendChild(addToWish);
-              cardR.appendChild(likesSection);
-              likesSection.appendChild(likesIcon);
-              likesSection.appendChild(likes);
-              cardR.appendChild(cardTime);
-              cardR.appendChild(ingredients);
+  result.extendedIngredients.forEach(function (element) {
+    let ingredient = document.createElement("li");
+    ingredient.innerText = element.original;
+    ingredients.appendChild(ingredient);
+  });
 
-              cardR.appendChild(cardInfo);
-              console.log(result);
-            });
-        }
+  cards.appendChild(card);
+  card.appendChild(cardL);
+  card.appendChild(cardR);
+  cardL.appendChild(cardImg);
+  cardR.appendChild(cardHeader);
+  cardHeader.appendChild(cardTitle);
+  cardHeader.appendChild(addToWish);
+  cardR.appendChild(likesSection);
+  likesSection.appendChild(likesIcon);
+  likesSection.appendChild(likes);
+  cardR.appendChild(cardTime);
+  cardR.appendChild(ingredients);
+  cardR.appendChild(cardInfo);
+}
 
-        console.log(randomArr);
-        console.log(firstArr);
+function restoreDefaults() {
+  randomRecipe = {};
+  firstRequest = [];
+  randomRecipes = [];
+}
+
+function render() {
+  dietCheck();
+  document.getElementById("search-1").addEventListener("click", function () {
+    restoreDefaults();
+    fetch(
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=82b80d934b85494f94a51a5223849b28${vegetarianCheck.value}${glutenCheck.value}${veganCheck.value}&number=50&instructionsRequired=true`
+    )
+      .then((response) => response.json())
+      .then(function (result) {
+        result.results.forEach((element) => firstRequest.push(element.id));
+
+        generateRecipes();
+        getSendId();
       })
       .catch((err) => console.log(err));
   });
+
+  document.getElementById("search-2").addEventListener("click", function () {
+    {
+      fetch(
+        `https://api.spoonacular.com/recipes/complexSearch?apiKey=82b80d934b85494f94a51a5223849b28${
+          document.getElementById("cousine").value
+        }${document.getElementById("meal-type").value}${
+          document.getElementById("cook-time").value
+        }${maxCaloriesFunc()}${veganCheck1.value}${vegetarianCheck1.value}${
+          glutenCheck1.value
+        }&number=30&instructionsRequired=true`
+      )
+        .then((response) => response.json())
+        .then(function (result) {
+          result.results.forEach((element) => firstRequest.push(element.id));
+
+          generateRecipes();
+          getSendId();
+        })
+        .catch((err) => console.log(err));
+    }
+  });
 }
-
-// function createSmallCard() {
-//   let card = document.createElement("div");
-//   let cardL = document.createElement("div");
-//   let cardR = document.createElement("div");
-//   let cardImg = document.createElement("div");
-//   let cardTitle = document.createElement("h2");
-//   let cardInfo = document.createElement("p");
-//   let cardTime = document.createElement("h3");
-
-//   cardL.className = "card-left";
-//   cardR.className = "card-right";
-//   cardImg.className = "card-img";
-//   card.className = "card";
-
-//   cardImg.style.backgroundImage = `url(${arrayZero.image})`;
-//   cardTitle.innerText = arrayZero.title;
-//   cardInfo.innerText = arrayZero.instructions;
-//   cardTime.innerText = `Ready in ${arrayZero.readyInMinutes} minutes`;
-
-//   cards.appendChild(card);
-//   card.appendChild(cardL);
-//   card.appendChild(cardR);
-//   cardL.appendChild(cardImg);
-//   cardL.appendChild(cardTime);
-//   cardR.appendChild(cardTitle);
-//   cardR.appendChild(cardInfo);
-// }
 
 render();

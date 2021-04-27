@@ -20,10 +20,15 @@
     <title>Today's meal</title>
   </head>
   <body>
+    <h1><a href="index.html">Today's Meal</a></h1>
+    <div class="wish-list" id="wish-list">
+      <i class="far fa-heart wish-list-icon"></i>
+      <h2><a href="#">Wish list</a></h2>
+    </div>
     <div
       style="
         width: 100%;
-        height: 380px;
+        height: 412px;
         display: flex;
         justify-content: center;
         padding-top: 140px;
@@ -31,37 +36,108 @@
     >
       <div class="impress width-500 mr-50 d-flex flex-column align-center">
         <button id="option-1" class="button pointer">Impress me</button>
-        <h3>Select diet if needed</h3>
-        <div class="choices d-flex space-btw width-80p align-center">
-          <input type="checkbox" id="vegetarian" value="" name="diet" />
-          <label for="vegetarian"> Vegetarian</label>
-          <input type="checkbox" id="vegan" name="diet" value="" />
-          <label for="vegan"> Vegan</label>
-          <input type="checkbox" id="gluten" name="gluten" value="" />
-          <label for="gluten"> Gluten - Free</label>
+        <div
+          class="complex-choose width-80p d-flex flex-column align-center"
+          id="choose-random"
+        >
+          <h3>Select diet if needed</h3>
+          <div class="choices d-flex space-btw width-80p align-center">
+            <input
+              type="checkbox"
+              id="vegetarian"
+              value=""
+              name="diet"
+              class="pointer"
+            />
+            <label for="vegetarian" class="pointer"> Vegetarian</label>
+            <input
+              type="checkbox"
+              id="vegan"
+              name="diet"
+              value=""
+              class="pointer"
+            />
+            <label for="vegan" class="pointer"> Vegan</label>
+            <input
+              type="checkbox"
+              id="gluten"
+              name="gluten"
+              value=""
+              class="pointer"
+            />
+            <label for="gluten" class="pointer"> Gluten - Free</label>
+          </div>
+          <button id="search-1" class="mt-20 pointer">Search</button>
         </div>
       </div>
       <div class="choose width-500 ml-50 d-flex flex-column align-center">
         <button id="option-2" class="button pointer">Let me choose</button>
-        <div class="complex-choose width-80p d-flex flex-column align-center">
-          <h3>Select cousine</h3>
-          <select name="cousine" id="cousine">
-            <option value="Asian">Asian</option>
-            <option value="Italian">Italian</option>
-            <option value="European">Europen</option>
-            <option value="American">American</option>
+        <div
+          class="complex-choose width-80p d-flex flex-column align-center"
+          id="complex-choose"
+        >
+          <select name="cousine" id="cousine" class="option mt-20 pointer">
+            <option value="">Select cuisine</option>
+            <option value="&cuisine=thai">Thai</option>
+            <option value="&cuisine=italian">Italian</option>
+            <option value="&cuisine=european">Europen</option>
+            <option value="&cuisine=american">American</option>
+            <option value="&cuisine=mexican">Mexican</option>
+            <option value="&cuisine=japanese">Japanese</option>
+            <option value="&cuisine=vietnamese">Vietnamese</option>
+            <option value="&cuisine=indian">indian</option>
           </select>
-          <h3>Maximum calories</h3>
-          <input type="tel" />
-          <h3>Select diet if needed</h3>
+          <select name="meal-type" id="meal-type" class="option mt-20 pointer">
+            <option value="">Select meal type</option>
+            <option value="&type=breakfast">Breakfast</option>
+            <option value="&type=main course">Main course</option>
+            <option value="&type=snack">Snack</option>
+            <option value="&type=salad">Salad</option>
+            <option value="&type=dessert">Dessert</option>
+            <option value="&type=side dish">Side dish</option>
+            <option value="&type=soup">Soup</option>
+          </select>
+          <select name="cook-time" id="cook-time" class="option mt-20 pointer">
+            <option value="">Cooking time up to</option>
+            <option value="&maxReadyTime=15">15 minutes</option>
+            <option value="&maxReadyTime=30">30 minutes</option>
+            <option value="&maxReadyTime=45">45 minutes</option>
+            <option value="&maxReadyTime=60">60 minutes</option>
+          </select>
+          <input
+            type="tel"
+            placeholder="Maximum calories"
+            id="max-calories"
+            class="option mt-20"
+          />
+          <h3 class="mtb-20">Select diet if needed</h3>
           <div class="choices d-flex space-btw width-80p align-center">
-            <input type="checkbox" id="vegetarian1" value="" name="diet1" />
-            <label for="vegetarian1"> Vegetarian</label>
-            <input type="checkbox" id="vegan1" name="diet1" value="" />
-            <label for="vegan1"> Vegan</label>
-            <input type="checkbox" id="gluten1" name="gluten1" value="" />
-            <label for="gluten1"> Gluten - Free</label>
+            <input
+              type="checkbox"
+              id="vegetarian1"
+              value=""
+              name="diet1"
+              class="pointer"
+            />
+            <label for="vegetarian1" class="pointer"> Vegetarian</label>
+            <input
+              type="checkbox"
+              id="vegan1"
+              name="diet1"
+              value=""
+              class="pointer"
+            />
+            <label for="vegan1" class="pointer"> Vegan</label>
+            <input
+              type="checkbox"
+              id="gluten1"
+              name="gluten1"
+              value=""
+              class="pointer"
+            />
+            <label for="gluten1" class="pointer"> Gluten - Free</label>
           </div>
+          <button id="search-2" class="mt-20 pointer">Search</button>
         </div>
       </div>
     </div>
