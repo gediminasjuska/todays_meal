@@ -100,80 +100,71 @@ function maxCaloriesFunc() {
   return maxCalories;
 }
 
+function create({tag, attributes = {} }){
+  const element = document.createElement(tag)
+  Object.entries(attributes).forEach(([key, value]) => {
+    element[key] = value
+  })
+  return element
+}
+
 function createCard(result) {
   let card = document.createElement("div");
+  card.className = "card";
   let cardL = document.createElement("div");
+  cardL.className = "card-left";
   let cardR = document.createElement("div");
+  cardR.className = "card-right";
   let cardImg = document.createElement("div");
   let cardHeader = document.createElement("div");
-  let cardTitle = document.createElement("h2");
+  cardHeader.className = "card-header";
   let addToWish = document.createElement("i");
-  let cardInfo = document.createElement("p");
-  let cardTime = document.createElement("h3");
+  addToWish.className = "far fa-heart heart-icon";
   let likesSection = document.createElement("div");
+  likesSection.className = "likes-section";
   let likesIcon = document.createElement("i");
-  let likes = document.createElement("p");
+  likesIcon.className = "fas fa-thumbs-up likes-icon";
   let ingredients = document.createElement("ul");
 
-  cardL.className = "card-left";
-  cardR.className = "card-right";
-  cardImg.className = "card-img";
-  card.className = "card";
-  cardHeader.className = "card-header";
-  addToWish.className = "far fa-heart heart-icon";
-  likesSection.className = "likes-section";
-  likes.className = "likes";
-  likesIcon.className = "fas fa-thumbs-up likes-icon";
-
-  cardImg.style.backgroundImage = `url(${result.image})`;
-  cardTitle.innerText = result.title;
-  cardInfo.innerHTML = `Instructions:\n${result.instructions}`;
-  cardTime.innerText = `Ready in ${result.readyInMinutes} minutes`;
-  likes.innerText = `${result.aggregateLikes}`;
-
-  let wishArr = [];
+  // const image = create({tag: 'div', attributes: {className: 'card-img', style: { backgroundImage: `${result.image}` }}})
+  // console.log(image)
+  // cardImg.className = "card-img";
+  // cardImg.style.backgroundImage = `url(${result.image})`;
+  
+ 
   let recipeIngridArr = [];
-  let recipeObj = {};
   result.extendedIngredients.forEach(function (element) {
     let ingredient = document.createElement("li");
     ingredient.innerText = element.original;
     ingredients.appendChild(ingredient);
     recipeIngridArr.push(element.original);
   });
-
-  function pushToWishList() {
-    let keyId = "id";
-    let keyImg = "image";
-    let keyTitle = "title";
-    let keyIns = "instructions";
-    let keyTime = "readyInMinutes";
-    let keyLikes = "aggregateLikes";
-    let keyIngrid = "Ingredients";
-
-    recipeObj[keyId] = result.id;
-    recipeObj[keyImg] = result.image;
-    recipeObj[keyTitle] = result.title;
-    recipeObj[keyIns] = result.instructions;
-    recipeObj[keyTime] = result.readyInMinutes;
-    recipeObj[keyLikes] = result.aggregateLikes;
-    recipeObj[keyIngrid] = recipeIngridArr;
-  }
-  pushToWishList();
-  wishArr.push(recipeObj);
-  console.log(wishArr);
+  
   cards.appendChild(card);
   card.appendChild(cardL);
   card.appendChild(cardR);
   cardL.appendChild(cardImg);
   cardR.appendChild(cardHeader);
-  cardHeader.appendChild(cardTitle);
+
+  const title = create({tag: 'h2', attributes: {textContent: `${result.title}`}})
+  cardHeader.appendChild(title);
+
   cardHeader.appendChild(addToWish);
+
   cardR.appendChild(likesSection);
   likesSection.appendChild(likesIcon);
+
+  const likes = create({tag: 'p', attributes: {textContent: `${result.aggregateLikes}`}})
+  likes.className = "likes";
   likesSection.appendChild(likes);
-  cardR.appendChild(cardTime);
+
+  const time = create({tag: 'h3', attributes: {textContent: ` Ready in ${result.readyInMinutes} minutes`}})
+  cardR.appendChild(time);
+
   cardR.appendChild(ingredients);
-  cardR.appendChild(cardInfo);
+  
+  const recipe = create({tag: 'p', attributes: {innerHTML: `${result.instructions}`}})
+  cardR.appendChild(recipe);
 }
 
 function restoreDefaults() {
