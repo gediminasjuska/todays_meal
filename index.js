@@ -14,10 +14,7 @@ const cards = document.getElementById("cards");
 let randomRecipe = {};
 let firstRequest = [];
 let randomRecipes = [];
-let wishList = [];
 let maxCalories = "";
-let recipeId = {};
-let recipeIngridArr = [];
 firstOption.addEventListener("click", function () {
   document.getElementById("choose-random").classList.toggle("active");
 });
@@ -81,30 +78,6 @@ function getSendId() {
       .then((response) => response.json())
       .then(function (result) {
         createCard(result);
-        console.log(result);
-        function pushToWishList() {
-          let keyId = "id";
-          let keyImg = "image";
-          let keyTitle = "title";
-          let keyIns = "instructions";
-          let keyTime = "readyInMinutes";
-          let keyLikes = "aggregateLikes";
-          let keyIngrid = "extendedIngredients";
-
-          recipeId[keyId] = result.id;
-          recipeId[keyImg] = result.image;
-          recipeId[keyTitle] = result.title;
-          recipeId[keyIns] = result.instructions;
-          recipeId[keyTime] = result.readyInMinutes;
-          recipeId[keyLikes] = result.aggregateLikes;
-          recipeId[keyIngrid] = recipeIngridArr;
-          result.extendedIngredients.forEach(function (element) {
-            recipeIngridArr.push(element.original);
-          });
-
-          console.log(recipeIngridArr);
-        }
-        pushToWishList();
       });
   }
 }
@@ -158,12 +131,36 @@ function createCard(result) {
   cardTime.innerText = `Ready in ${result.readyInMinutes} minutes`;
   likes.innerText = `${result.aggregateLikes}`;
 
+  let wishArr = [];
+  let recipeIngridArr = [];
+  let recipeObj = {};
   result.extendedIngredients.forEach(function (element) {
     let ingredient = document.createElement("li");
     ingredient.innerText = element.original;
     ingredients.appendChild(ingredient);
+    recipeIngridArr.push(element.original);
   });
 
+  function pushToWishList() {
+    let keyId = "id";
+    let keyImg = "image";
+    let keyTitle = "title";
+    let keyIns = "instructions";
+    let keyTime = "readyInMinutes";
+    let keyLikes = "aggregateLikes";
+    let keyIngrid = "Ingredients";
+
+    recipeObj[keyId] = result.id;
+    recipeObj[keyImg] = result.image;
+    recipeObj[keyTitle] = result.title;
+    recipeObj[keyIns] = result.instructions;
+    recipeObj[keyTime] = result.readyInMinutes;
+    recipeObj[keyLikes] = result.aggregateLikes;
+    recipeObj[keyIngrid] = recipeIngridArr;
+  }
+  pushToWishList();
+  wishArr.push(recipeObj);
+  console.log(wishArr);
   cards.appendChild(card);
   card.appendChild(cardL);
   card.appendChild(cardR);
