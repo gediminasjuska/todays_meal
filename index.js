@@ -128,8 +128,8 @@ function createCard(result) {
 
   // const image = create({tag: 'div', attributes: {className: 'card-img', style: { backgroundImage: `${result.image}` }}})
   // console.log(image)
-  // cardImg.className = "card-img";
-  // cardImg.style.backgroundImage = `url(${result.image})`;
+  
+ 
   
  
   let recipeIngridArr = [];
@@ -143,7 +143,11 @@ function createCard(result) {
   cards.appendChild(card);
   card.appendChild(cardL);
   card.appendChild(cardR);
+
+  cardImg.style.backgroundImage = `url(${result.image})`;
+  cardImg.className = "card-img";
   cardL.appendChild(cardImg);
+  
   cardR.appendChild(cardHeader);
 
   const title = create({tag: 'h2', attributes: {textContent: `${result.title}`}})
